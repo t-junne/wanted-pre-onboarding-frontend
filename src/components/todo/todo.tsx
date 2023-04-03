@@ -7,6 +7,7 @@ import icDelete from '../../assets/icons/delete.svg'
 import icCheck from '../../assets/icons/check.svg'
 import icCheckWhite from '../../assets/icons/check-white.svg'
 import icCancel from '../../assets/icons/cancel.svg'
+import { Tooltip } from '../tooltip/tooltip'
 
 interface TodoProps {
   id: string
@@ -74,6 +75,7 @@ export const Todo = ({ id, todo, isCompleted, update }: TodoProps) => {
               type='text'
               value={editContent}
               onChange={(e) => setEditContent(e.target.value)}
+              data-testid="modify-input"
             />
           </div>
         ) : (
@@ -83,33 +85,53 @@ export const Todo = ({ id, todo, isCompleted, update }: TodoProps) => {
       <Action>
         {editEnabled ? (
           <>
-            <button onClick={() => {
-              setContent(editContent)
-              handleClickUpdateTodo()
-              setEditEnabled(false)
-            }}>
-              <img src={icCheck} alt='확인' />
-            </button>
-            <button
-              onClick={() => {
-                setEditContent(todo)
-                setEditEnabled(false)
-              }}
-            >
-              <img src={icCancel} alt='취소' />
-            </button>
+            <Tooltip text='제출'>
+              <button
+                className='action-btn action-btn-submit'
+                onClick={() => {
+                  setContent(editContent)
+                  handleClickUpdateTodo()
+                  setEditEnabled(false)
+                }}
+                data-testid="submit-button"
+              >
+                <img src={icCheck} alt='제출' />
+              </button>
+            </Tooltip>
+            <Tooltip text='취소'>
+              <button
+                className='action-btn action-btn-cancel'
+                onClick={() => {
+                  setEditContent(todo)
+                  setEditEnabled(false)
+                }}
+                data-testid="cancel-button"
+              >
+                <img src={icCancel} alt='취소' />
+              </button>
+            </Tooltip>
+            
           </>
         ) : (
           <>
-            <button
-              onClick={() => setEditEnabled(true)}
-              data-testid='modify-button'
-            >
-              <img src={icEdit} alt='수정' />
-            </button>
-            <button onClick={handleClickDeleteTodo} data-testid='delete-button'>
-              <img src={icDelete} alt='삭제' />
-            </button>
+            <Tooltip text='수정'>
+              <button
+                className='action-btn action-btn-edit'
+                onClick={() => setEditEnabled(true)}
+                data-testid='modify-button'
+              >
+                <img src={icEdit} alt='수정' />
+              </button>
+            </Tooltip>
+            <Tooltip text='삭제'>
+              <button
+                className='action-btn action-btn-delete'
+                onClick={handleClickDeleteTodo}
+                data-testid='delete-button'
+              >
+                <img src={icDelete} alt='삭제' />
+              </button>
+            </Tooltip>
           </>
         )}
       </Action>
