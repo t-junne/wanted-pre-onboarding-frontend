@@ -90,7 +90,10 @@ export const SignInPage = () => {
         </form>
       </FormWrapper>
       <ToSignUp>
-        아직 계정이 없으신가요? <button onClick={() => navigate('/signup')}><span>회원가입</span></button>
+        아직 계정이 없으신가요?{' '}
+        <button onClick={() => navigate('/signup')}>
+          <span>회원가입</span>
+        </button>
       </ToSignUp>
     </Wrapper>
   )

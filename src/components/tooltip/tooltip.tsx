@@ -1,6 +1,6 @@
-import { ReactNode } from "react"
-import styled, { keyframes } from "styled-components"
-import { theme } from "../../styles/theme"
+import { ReactNode } from 'react'
+import styled, { keyframes } from 'styled-components'
+import { theme } from '../../styles/theme'
 
 interface TooltipProps {
   children: ReactNode
@@ -10,9 +10,7 @@ interface TooltipProps {
 export const Tooltip = ({ children, text }: TooltipProps) => {
   return (
     <Wrapper>
-      <div className="tooltip">
-        {text}
-      </div>
+      <div className='tooltip'>{text}</div>
       {children}
     </Wrapper>
   )
@@ -44,7 +42,7 @@ const Wrapper = styled.div`
     font-size: 14px;
 
     ::after {
-      content: "";
+      content: '';
       border-top: 6px solid ${theme.colors.grey90};
       border-left: 8px solid transparent;
       border-right: 8px solid transparent;

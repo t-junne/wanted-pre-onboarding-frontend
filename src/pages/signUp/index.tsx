@@ -118,7 +118,10 @@ export const SignUpPage = () => {
         </form>
       </FormWrapper>
       <ToSignIn>
-        이미 계정이 있으신가요? <button onClick={() => navigate('/signin')}><span>로그인</span></button>
+        이미 계정이 있으신가요?{' '}
+        <button onClick={() => navigate('/signin')}>
+          <span>로그인</span>
+        </button>
       </ToSignIn>
     </Wrapper>
   )

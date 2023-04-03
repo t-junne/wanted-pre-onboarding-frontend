@@ -7,7 +7,7 @@ export const createTodo = async (data: CreateTodoDto) => {
     const response = await fetch(`${BASE_URL}todos`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
@@ -22,7 +22,7 @@ export const getTodos = async () => {
   const token = window.localStorage.getItem('access_token')
   const data = await fetch(`${BASE_URL}todos`, {
     method: 'GET',
-    headers: { 'Authorization': `Bearer ${token}` },
+    headers: { Authorization: `Bearer ${token}` },
   })
   return data
 }
@@ -32,13 +32,13 @@ export const updateTodo = async (data: UpdateTodoDto) => {
   const response = await fetch(`${BASE_URL}todos/${data.id}`, {
     method: 'PUT',
     headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       todo: data.todo,
       isCompleted: data.isCompleted,
-    })
+    }),
   })
   return response
 }
@@ -47,7 +47,7 @@ export const deleteTodo = async (id: string) => {
   const token = window.localStorage.getItem('access_token')
   const response = await fetch(`${BASE_URL}todos/${id}`, {
     method: 'DELETE',
-    headers: { 'Authorization': `Bearer ${token}` },
+    headers: { Authorization: `Bearer ${token}` },
   })
   return response
 }

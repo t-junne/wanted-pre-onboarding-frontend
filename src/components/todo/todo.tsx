@@ -30,7 +30,7 @@ export const Todo = ({ id, todo, isCompleted, update }: TodoProps) => {
       if (response.ok) {
         update(() => true)
       }
-    } catch(e: any) {
+    } catch (e: any) {
       throw new Error(e)
     }
   }
@@ -47,7 +47,7 @@ export const Todo = ({ id, todo, isCompleted, update }: TodoProps) => {
       if (response.ok) {
         update(() => true)
       }
-    } catch(e: any) {
+    } catch (e: any) {
       throw new Error(e)
     }
   }
@@ -75,7 +75,7 @@ export const Todo = ({ id, todo, isCompleted, update }: TodoProps) => {
               type='text'
               value={editContent}
               onChange={(e) => setEditContent(e.target.value)}
-              data-testid="modify-input"
+              data-testid='modify-input'
             />
           </div>
         ) : (
@@ -93,7 +93,7 @@ export const Todo = ({ id, todo, isCompleted, update }: TodoProps) => {
                   handleClickUpdateTodo()
                   setEditEnabled(false)
                 }}
-                data-testid="submit-button"
+                data-testid='submit-button'
               >
                 <img src={icCheck} alt='제출' />
               </button>
@@ -105,12 +105,11 @@ export const Todo = ({ id, todo, isCompleted, update }: TodoProps) => {
                   setEditContent(todo)
                   setEditEnabled(false)
                 }}
-                data-testid="cancel-button"
+                data-testid='cancel-button'
               >
                 <img src={icCancel} alt='취소' />
               </button>
             </Tooltip>
-            
           </>
         ) : (
           <>
@@ -152,7 +151,7 @@ const CheckboxLabel = styled.label<{ checked: boolean }>`
   display: flex;
   align-items: center;
   gap: 8px;
-  input[type="checkbox"] {
+  input[type='checkbox'] {
     display: none;
   }
   .checkbox {
