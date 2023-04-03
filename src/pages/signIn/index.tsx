@@ -64,7 +64,7 @@ export const SignInPage = () => {
       setErrMsg('')
       setIsValidEmail(true)
     }
-  }, [email])
+  }, [email, validateEmail])
 
   useEffect(() => {
     const isValid = validatePassword(password)
@@ -77,7 +77,7 @@ export const SignInPage = () => {
       setIsValidPassword(true)
       setErrMsg('')
     }
-  }, [password])
+  }, [password, validatePassword])
 
   useEffect(() => {
     if (isSuccess) {

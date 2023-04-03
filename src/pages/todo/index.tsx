@@ -5,24 +5,20 @@ import { Todo } from '../../components/todo/todo'
 import { CreateTodo } from '../../components/todo/createTodo'
 import { getTodos } from '../../apis/todo'
 import { GetTodoDto } from '../../apis/todo/dtos'
-import { Spinner } from '../../components/common/spinner/spinner'
 
 export const TodoPage = () => {
   const [needUpdate, setNeedUpdate] = useState(false)
   const [todos, setTodos] = useState<GetTodoDto[]>([])
-  const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(true)
   const fetchData = useCallback(async () => {
     try {
-      setIsLoading(true)
-      ;(await getTodos()).json().then((res) => {
+      (await getTodos()).json().then((res) => {
         setTodos(res)
         setIsSuccess(true)
       })
     } catch (e: any) {
       throw new Error(e)
     } finally {
-      setIsLoading(false)
     }
   }, [])
 
