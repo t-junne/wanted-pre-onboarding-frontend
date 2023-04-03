@@ -6,8 +6,8 @@ import { TextInput } from '../../components/common/input/textInput'
 import { ContainedButton } from '../../components/common/button/containedButton'
 import { signUp } from '../../apis/auth'
 import { Spinner } from '../../components/common/spinner/spinner'
+import { useValidation } from '../../hooks/useValidation'
 
-const emailRegEx = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@([-_.]?[0-9a-zA-Z])/i
 const EMAIL_ERR_MSG = '올바른 이메일 주소가 아닙니다.'
 const DUPLICATE_EMAIL = '이미 가입된 이메일 주소입니다.'
 const PW_ERR_MSG = '비밀번호는 8자 이상이어야 합니다.'
@@ -21,28 +21,8 @@ export const SignUpPage = () => {
   const [isSuccess, setIsSuccess] = useState(false)
   const [isError, setIsError] = useState(false)
   const [errMsg, setErrMsg] = useState('')
-
   const navigate = useNavigate()
-
-  const validateEmail = (email: string) => {
-    if (email.length >= 1 && !emailRegEx.test(email)) {
-      setIsValidEmail(false)
-      setIsError(true)
-      setErrMsg(EMAIL_ERR_MSG)
-      return
-    }
-    setIsError(false)
-    setErrMsg('')
-    setIsValidEmail(true)
-  }
-
-  const validatePassword = (password: string) => {
-    if (password.length >= 1 && password.length < 8) {
-      setIsValidPassword(false)
-      return
-    }
-    setIsValidPassword(true)
-  }
+  const { validateEmail, validatePassword } = useValidation()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -68,9 +48,26 @@ export const SignUpPage = () => {
   }
 
   useEffect(() => {
-    validateEmail(email)
-    validatePassword(password)
-  }, [email, password])
+    const isValid = validateEmail(email)
+    if (!isValid) {
+      setIsValidEmail(false)
+      setIsError(true)
+      setErrMsg(EMAIL_ERR_MSG)
+    } else {
+      setIsError(false)
+      setErrMsg('')
+      setIsValidEmail(true)
+    }
+  }, [email])
+
+  useEffect(() => {
+    const isValid = validatePassword(password)
+    if (!isValid) {
+      setIsValidPassword(false)
+    } else {
+      setIsValidPassword(true)
+    }
+  }, [password])
 
   useEffect(() => {
     if (isSuccess) {

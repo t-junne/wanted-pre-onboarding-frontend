@@ -6,37 +6,43 @@ import { TextInput } from '../../components/common/input/textInput'
 import { ContainedButton } from '../../components/common/button/containedButton'
 import { signIn } from '../../apis/auth'
 import { Spinner } from '../../components/common/spinner/spinner'
+import { useValidation } from '../../hooks/useValidation'
 
+const EMAIL_ERR_MSG = '올바른 이메일 주소가 아닙니다.'
+const PW_ERR_MSG = '비밀번호는 8자 이상이어야 합니다.'
 const ERR_MSG = '유효한 이메일 또는 비밀번호가 아닙니다.'
 
 export const SignInPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [isValidEmail, setIsValidEmail] = useState(true)
+  const [isValidPassword, setIsValidPassword] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [isError, setIsError] = useState(false)
   const [errMsg, setErrMsg] = useState('')
-
+  const [notAuthenticated, setNotAuthenticated] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from?.pathname || '/todo'
+  const { validateEmail, validatePassword } = useValidation()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (email && password) {
+    if (isValidEmail && isValidPassword && email && password) {
       try {
         setIsLoading(true)
         const response = await signIn({ email, password })
         if (!response.ok) {
-          setIsError(true)
+          setNotAuthenticated(true)
           setErrMsg(ERR_MSG)
         }
 
         if (response.ok) {
           setEmail('')
           setPassword('')
-          setIsError(false)
+          setNotAuthenticated(false)
           setErrMsg('')
           const accessToken = await response
             .json()
@@ -49,6 +55,29 @@ export const SignInPage = () => {
       }
     }
   }
+
+  useEffect(() => {
+    const isValid = validateEmail(email)
+    if (!isValid) {
+      setIsValidEmail(false)
+    } else {
+      setErrMsg('')
+      setIsValidEmail(true)
+    }
+  }, [email])
+
+  useEffect(() => {
+    const isValid = validatePassword(password)
+    if (!isValid) {
+      setIsError(true)
+      setIsValidPassword(false)
+      setErrMsg(PW_ERR_MSG)
+    } else {
+      setIsError(false)
+      setIsValidPassword(true)
+      setErrMsg('')
+    }
+  }, [password])
 
   useEffect(() => {
     if (isSuccess) {
@@ -69,7 +98,8 @@ export const SignInPage = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             dataTestId='email-input'
-            error={isError}
+            error={!isValidEmail || notAuthenticated}
+            errMsg={!isValidEmail ? EMAIL_ERR_MSG : ''}
           />
           <TextInput
             type='password'
@@ -77,7 +107,7 @@ export const SignInPage = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             dataTestId='password-input'
-            error={isError}
+            error={isError || notAuthenticated}
             errMsg={errMsg}
           />
           <ContainedButton

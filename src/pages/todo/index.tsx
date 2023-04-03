@@ -46,7 +46,6 @@ export const TodoPage = () => {
       <TodoWrapper>
         <CreateTodo update={setNeedUpdate} />
         <TodoList>
-          {isLoading && <Spinner />}
           {isSuccess &&
             [...todos].reverse().map((value) => (
               <li key={value.id}>
