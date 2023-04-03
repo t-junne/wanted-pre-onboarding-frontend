@@ -3,8 +3,14 @@ export interface CreateTodoDto {
 }
 
 export interface GetTodoDto {
-  id: number
+  id: string
   todo: string
   isCompleted: boolean
   userId: number
+}
+
+export interface UpdateTodoDto {
+  id: string
+  todo: string
+  isCompleted: boolean
 }

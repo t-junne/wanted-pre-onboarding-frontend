@@ -4,6 +4,7 @@ import { ContainedButton } from '../common/button/containedButton'
 import { TextInput } from '../common/input/textInput'
 import { theme } from '../../styles/theme'
 import { createTodo } from '../../apis/todo'
+import { Spinner } from '../common/spinner/spinner'
 
 interface CreateTodoProps {
   update: Dispatch<SetStateAction<boolean>>
@@ -43,7 +44,7 @@ export const CreateTodo = ({ update }: CreateTodoProps) => {
         onClick={handleClickAddTodo}
         disabled={!content.length}
       >
-        추가
+        {isLoading ? <Spinner /> : '추가'}
       </StyledContainedButton>
     </Wrapper>
   )

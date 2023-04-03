@@ -5,13 +5,13 @@ import { Todo } from '../../components/todo/todo'
 import { CreateTodo } from '../../components/todo/createTodo'
 import { getTodos } from '../../apis/todo'
 import { GetTodoDto } from '../../apis/todo/dtos'
+import { Spinner } from '../../components/common/spinner/spinner'
 
 export const TodoPage = () => {
   const [needUpdate, setNeedUpdate] = useState(false)
   const [todos, setTodos] = useState<GetTodoDto[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(true)
-  const [isError, setIsError] = useState(false)
   const fetchData = useCallback(async () => {
     try {
       setIsLoading(true)
@@ -20,7 +20,6 @@ export const TodoPage = () => {
         setIsSuccess(true)
       })
     } catch (e: any) {
-      setIsError(true)
       throw new Error(e)
     } finally {
       setIsLoading(false)
@@ -29,6 +28,7 @@ export const TodoPage = () => {
 
   useEffect(() => {
     fetchData()
+    // eslint-disable-next-line
   }, [])
 
   useEffect(() => {
@@ -38,20 +38,17 @@ export const TodoPage = () => {
     }
   }, [needUpdate, fetchData])
 
-  useEffect(() => {
-    console.log(todos)
-  })
-
   return (
     <Wrapper>
       <Header>
         <div>Todo List</div>
       </Header>
-      <CreateTodo update={setNeedUpdate} />
-      <TodoList>
-        <ul>
+      <TodoWrapper>
+        <CreateTodo update={setNeedUpdate} />
+        <TodoList>
+          {isLoading && <Spinner />}
           {isSuccess &&
-            todos.reverse().map((value) => (
+            [...todos].reverse().map((value) => (
               <li key={value.id}>
                 <Todo
                   id={value.id}
@@ -61,8 +58,8 @@ export const TodoPage = () => {
                 />
               </li>
             ))}
-        </ul>
-      </TodoList>
+        </TodoList>
+      </TodoWrapper>
     </Wrapper>
   )
 }
@@ -87,13 +84,13 @@ const Header = styled.div`
     margin: auto;
   }
 `
-const TodoList = styled.div`
-  padding: 20px;
-  max-height: calc(100vh - 40px);
+const TodoWrapper = styled.div`
+  max-height: calc(100vh - 90px);
   overflow-y: auto;
-  ul {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
+`
+const TodoList = styled.ul`
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 `

@@ -117,6 +117,9 @@ export const SignUpPage = () => {
           </ContainedButton>
         </form>
       </FormWrapper>
+      <ToSignIn>
+        이미 계정이 있으신가요? <button onClick={() => navigate('/signin')}><span>로그인</span></button>
+      </ToSignIn>
     </Wrapper>
   )
 }
@@ -145,5 +148,15 @@ const FormWrapper = styled.div`
   position: relative;
   .form-signup {
     padding: 20px;
+  }
+`
+const ToSignIn = styled.div`
+  padding: 10px 20px;
+  text-align: center;
+  span {
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: underline;
   }
 `
