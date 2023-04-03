@@ -10,11 +10,11 @@ function App() {
   return (
     <div className='App'>
       <Routes>
-        <Route path='/' element={<Navigate to='todo' />} />
-        <Route path='signup' element={token ? <TodoPage /> : <SignUpPage />} />
-        <Route path='signin' element={token ? <TodoPage /> : <SignInPage />} />
+        <Route path='/' element={<Navigate to='/todo' />} />
+        <Route path='/signup' element={token ? <Navigate to='/todo' /> : <SignUpPage />} />
+        <Route path='/signin' element={token ? <Navigate to='/todo' /> : <SignInPage />} />
         <Route element={<RequireAuth />}>
-          <Route path='todo' element={<TodoPage />} />
+          <Route path='/todo' element={<TodoPage />} />
         </Route>
       </Routes>
     </div>
