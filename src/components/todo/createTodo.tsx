@@ -1,9 +1,9 @@
-import { Dispatch, SetStateAction, useState } from "react"
-import styled from "styled-components"
-import { ContainedButton } from "../common/button/containedButton"
-import { TextInput } from "../common/input/textInput"
-import { theme } from "../../styles/theme"
-import { createTodo } from "../../apis/todo"
+import { Dispatch, SetStateAction, useState } from 'react'
+import styled from 'styled-components'
+import { ContainedButton } from '../common/button/containedButton'
+import { TextInput } from '../common/input/textInput'
+import { theme } from '../../styles/theme'
+import { createTodo } from '../../apis/todo'
 
 interface CreateTodoProps {
   update: Dispatch<SetStateAction<boolean>>
@@ -12,17 +12,19 @@ interface CreateTodoProps {
 export const CreateTodo = ({ update }: CreateTodoProps) => {
   const [content, setContent] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  
+
   const handleClickAddTodo = async () => {
     try {
-      setIsLoading(true)
-      const response = await createTodo({ todo: content })
-      
-      if (response.ok) {
-        setContent('')
-        update(() => true)
+      if (content.length > 0) {
+        setIsLoading(true)
+        const response = await createTodo({ todo: content })
+
+        if (response.ok) {
+          setContent('')
+          update(() => true)
+        }
       }
-    } catch(e: any) {
+    } catch (e: any) {
       throw new Error(e)
     } finally {
       setIsLoading(false)
@@ -30,10 +32,14 @@ export const CreateTodo = ({ update }: CreateTodoProps) => {
   }
   return (
     <Wrapper>
-      <StyledTextInput value={content} onChange={(e) => setContent(e.target.value)} dataTestId="new-todo-input" />
+      <StyledTextInput
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+        dataTestId='new-todo-input'
+      />
       <StyledContainedButton
         className='add-todo-btn'
-        dataTestId="new-todo-add-button"
+        dataTestId='new-todo-add-button'
         onClick={handleClickAddTodo}
         disabled={!content.length}
       >

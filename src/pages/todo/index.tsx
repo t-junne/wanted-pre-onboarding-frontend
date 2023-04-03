@@ -14,14 +14,12 @@ export const TodoPage = () => {
   const [isError, setIsError] = useState(false)
   const fetchData = useCallback(async () => {
     try {
-      setIsLoading(true);
-      (await getTodos())
-        .json()
-        .then((res) => {
-          setTodos((prev) => [...prev, res])
-          setIsSuccess(true)
+      setIsLoading(true)
+      ;(await getTodos()).json().then((res) => {
+        setTodos(res)
+        setIsSuccess(true)
       })
-    } catch(e: any) {
+    } catch (e: any) {
       setIsError(true)
       throw new Error(e)
     } finally {
@@ -34,7 +32,10 @@ export const TodoPage = () => {
   }, [])
 
   useEffect(() => {
-    needUpdate && fetchData()
+    if (needUpdate) {
+      fetchData()
+      setNeedUpdate(false)
+    }
   }, [needUpdate, fetchData])
 
   useEffect(() => {
@@ -49,14 +50,18 @@ export const TodoPage = () => {
       <CreateTodo update={setNeedUpdate} />
       <TodoList>
         <ul>
-          {isSuccess && 
-            todos.map((value) => (
+          {isSuccess &&
+            todos.reverse().map((value) => (
               <li key={value.id}>
-                <Todo id={value.id} todo={value.todo} isCompleted={value.isCompleted} />
+                <Todo
+                  id={value.id}
+                  todo={value.todo}
+                  isCompleted={value.isCompleted}
+                  update={setNeedUpdate}
+                />
               </li>
             ))}
         </ul>
-        
       </TodoList>
     </Wrapper>
   )
@@ -84,6 +89,8 @@ const Header = styled.div`
 `
 const TodoList = styled.div`
   padding: 20px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
   ul {
     display: flex;
     flex-direction: column;

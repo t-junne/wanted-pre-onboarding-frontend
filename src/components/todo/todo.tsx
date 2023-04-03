@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { theme } from '../../styles/theme'
+import { deleteTodo } from '../../apis/todo'
 import icEdit from '../../assets/icons/edit.svg'
 import icDelete from '../../assets/icons/delete.svg'
 import icCheck from '../../assets/icons/check.svg'
@@ -11,13 +12,25 @@ interface TodoProps {
   id: number
   todo: string
   isCompleted: boolean
+  update: Dispatch<SetStateAction<boolean>>
 }
 
-export const Todo = ({ id, todo, isCompleted }: TodoProps) => {
+export const Todo = ({ id, todo, isCompleted, update }: TodoProps) => {
   const [checked, setChecked] = useState(isCompleted)
   const [editEnabled, setEditEnabled] = useState(false)
   const [content, setContent] = useState(todo)
-  
+
+  const handleClickDeleteTodo = async () => {
+    try {
+      const response = await deleteTodo(id.toString())
+      if (response.ok) {
+        update(() => true)
+      }
+    } catch (e: any) {
+      throw new Error(e)
+    }
+  }
+
   return (
     <Wrapper>
       <CheckboxLabel className='todo' htmlFor='todo' checked={checked}>
@@ -27,7 +40,7 @@ export const Todo = ({ id, todo, isCompleted }: TodoProps) => {
           onChange={() => setChecked(!checked)}
         />
         <div className='checkbox'>
-            <img src={icCheckWhite} alt='check' />
+          <img src={icCheckWhite} alt='check' />
         </div>
         {editEnabled ? (
           <div className='todo-edit-wrapper'>
@@ -58,10 +71,13 @@ export const Todo = ({ id, todo, isCompleted }: TodoProps) => {
           </>
         ) : (
           <>
-            <button onClick={() => setEditEnabled(true)} data-testid="modify-button">
+            <button
+              onClick={() => setEditEnabled(true)}
+              data-testid='modify-button'
+            >
               <img src={icEdit} alt='수정' />
             </button>
-            <button data-testid="delete-button">
+            <button onClick={handleClickDeleteTodo} data-testid='delete-button'>
               <img src={icDelete} alt='삭제' />
             </button>
           </>
@@ -84,7 +100,7 @@ const CheckboxLabel = styled.label<{ checked: boolean }>`
   display: flex;
   align-items: center;
   gap: 8px;
-  input[type="checkbox"] {
+  input[type='checkbox'] {
     display: none;
   }
   .checkbox {
@@ -95,14 +111,15 @@ const CheckboxLabel = styled.label<{ checked: boolean }>`
       width: 100%;
       height: 100%;
     }
-    ${({ checked }) => checked ?
-    css`
-      background-color: ${theme.colors.green50};
-    ` :
-    css`
-      border: 1px solid ${theme.colors.grey40};
-      background-color: white;
-    `}
+    ${({ checked }) =>
+      checked
+        ? css`
+            background-color: ${theme.colors.green50};
+          `
+        : css`
+            border: 1px solid ${theme.colors.grey40};
+            background-color: white;
+          `}
   }
   .todo-content {
     padding: 2px 0 2px 4px;
