@@ -26,5 +26,8 @@ button {
   background: none;
   border: none;
 }
+ul {
+  list-style: none;
+}
 `
 export default GlobalStyle

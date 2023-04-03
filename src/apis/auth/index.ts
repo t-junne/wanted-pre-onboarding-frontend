@@ -1,11 +1,11 @@
 import { BASE_URL } from '../baseURL'
 
-interface DataType {
+interface AuthDto {
   email: string
   password: string
 }
 
-export const signUp = async (data: DataType) => {
+export const signUp = async (data: AuthDto) => {
   const response = await fetch(`${BASE_URL}auth/signup`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -14,7 +14,7 @@ export const signUp = async (data: DataType) => {
   return response
 }
 
-export const signIn = async (data: DataType) => {
+export const signIn = async (data: AuthDto) => {
   const response = await fetch(`${BASE_URL}auth/signin`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { theme } from '../../styles/theme'
 import { TextInput } from '../../components/common/input/textInput'
@@ -16,7 +16,10 @@ export const SignInPage = () => {
   const [isSuccess, setIsSuccess] = useState(false)
   const [isError, setIsError] = useState(false)
   const [errMsg, setErrMsg] = useState('')
+  
   const navigate = useNavigate()
+  const location = useLocation()
+  const from = location.state?.from?.pathname || '/todo'
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -31,6 +34,8 @@ export const SignInPage = () => {
         }
 
         if (response.ok) {
+          setEmail('')
+          setPassword('')
           setIsError(false)
           setErrMsg('')
           const accessToken = await response
@@ -47,9 +52,9 @@ export const SignInPage = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      navigate('/todo')
+      navigate(from, { replace: true })
     }
-  }, [isSuccess, navigate])
+  }, [isSuccess, navigate, from])
 
   return (
     <Wrapper className='signin'>

@@ -57,6 +57,8 @@ export const SignUpPage = () => {
         }
 
         if (response.ok) {
+          setEmail('')
+          setPassword('')
           setIsSuccess(true)
         }
       } finally {

@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom'
 import { SignUpPage } from './pages/signUp'
 import { SignInPage } from './pages/signIn'
 import { TodoPage } from './pages/todo'
+import { RequireAuth } from './components/auth/requireAuth'
 
 function App() {
   return (
@@ -9,7 +10,9 @@ function App() {
       <Routes>
         <Route path='/signup' element={<SignUpPage />} />
         <Route path='/signin' element={<SignInPage />} />
-        <Route path='/todo' element={<TodoPage />} />
+        <Route element={<RequireAuth />}>
+          <Route path='/todo' element={<TodoPage />} />
+        </Route>
       </Routes>
     </div>
   )
